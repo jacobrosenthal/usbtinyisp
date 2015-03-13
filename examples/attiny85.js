@@ -46,11 +46,9 @@ var bootload = function(cb){
     }
 
     function close(){
-      return when.promise(function(resolve, reject) {
-        tinyAVR.close(function(err){
-          if(err){ return reject(err); }
-          return resolve();
-        });
+      return when.promise(function(resolve) {
+        tinyAVR.close();
+        return resolve();
       });
     }
 
@@ -216,4 +214,7 @@ var bootload = function(cb){
   }), cb);
 };
 
-bootload(console.log.bind(console));
+bootload(function(error){
+  if(error) { console.log(error); }
+  console.log('Success');
+});
