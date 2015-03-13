@@ -11,13 +11,26 @@ var usbtiny = function(options) {
 
   EE.call(this);
 
-  this.device = usb.findByIds(options.vid, options.pid);
-
-  this.device.open();
-
+  this.device = {};
+  this.options = options;
 };
 util.inherits(usbtiny, EE);
 
+usbtiny.prototype.open = function(cb){
+  var self = this;
+  
+  usb.findByIds(this.options.vid, this.options.pid, function(err, device){
+    if(err) { return cb(err); }
+
+    self.device = device;
+    self.device.open(cb);
+  });
+};
+
+usbtiny.prototype.close = function(cb){
+
+  this.device.close(cb);
+};
 
 usbtiny.prototype.setSCK = function(cb){
 

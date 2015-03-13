@@ -33,7 +33,26 @@ var options = {
 var bootload = function(cb){
   return nodefn.bindCallback(when.promise(function(resolve, reject) {
 
-    var tinyAVR = new usbtinyisp(options);
+    var tinyAVR;
+
+    function open(){
+      return when.promise(function(resolve, reject) {
+        tinyAVR = new usbtinyisp(options);
+        tinyAVR.open(function(err){
+          if(err){ return reject(err); }
+          return resolve();
+        });
+      });
+    }
+
+    function close(){
+      return when.promise(function(resolve, reject) {
+        tinyAVR.close(function(err){
+          if(err){ return reject(err); }
+          return resolve();
+        });
+      });
+    }
 
     function setSCK(){
       return when.promise(function(resolve, reject) {
@@ -179,14 +198,16 @@ var bootload = function(cb){
       return when.unfold(unspool, predicate, handler, 0);
     }
 
-    sync()
+    open()
+    .then(sync)
     .then(verifySignature)
     .then(erase)
     .then(sync)
     .then(upload)
     .then(powerDown)
-    .then(function(results){
-      return resolve(results);
+    .finally(close)
+    .then(function(){
+      return resolve();
     },
     function(error){
       return reject(error);
