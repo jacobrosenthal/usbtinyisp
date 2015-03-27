@@ -12,7 +12,7 @@ var usbtiny = function(options) {
   EE.call(this);
 
   this.device = {};
-  this.log = options.log || console.log;
+  this.log = options.log || function(){};
   this.options = options;
 };
 util.inherits(usbtiny, EE);
