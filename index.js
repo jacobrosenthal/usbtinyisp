@@ -12,6 +12,7 @@ var usbtiny = function(options) {
   EE.call(this);
 
   this.device = {};
+  this.log = options.log || console.log;
   this.options = options;
 };
 util.inherits(usbtiny, EE);
@@ -40,7 +41,7 @@ usbtiny.prototype.setSCK = function(cb){
   var index = statics.RESET_LOW;
   var length = 0;
 
-  console.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', val.toString(16), ' index: ', index.toString(16), ' buflen: ', length.toString(16));
+  this.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', val.toString(16), ' index: ', index.toString(16), ' buflen: ', length.toString(16));
 
   this.device.controlTransfer(
     requesttype, requestid, val, index, length, cb);
@@ -54,7 +55,7 @@ usbtiny.prototype.spi = function(buffer, cb){
   var index = (buffer[3] << 8) | buffer[2];
   var length = 4;
 
-  console.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', val.toString(16), ' index: ', index.toString(16), ' buflen: ', length.toString(16));
+  this.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', val.toString(16), ' index: ', index.toString(16), ' buflen: ', length.toString(16));
 
   this.device.controlTransfer(
     requesttype, requestid, val, index, length, cb);
@@ -65,7 +66,7 @@ usbtiny.prototype.readFlash = function(delay, address, length, cb){
   var requesttype = 0xC0;
   var requestid = statics.USBTINY_FLASH_READ;
 
-  console.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', delay.toString(16), ' index: ', address.toString(16), ' buflen: ', length.toString(16));
+  this.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', delay.toString(16), ' index: ', address.toString(16), ' buflen: ', length.toString(16));
 
   this.device.controlTransfer(
     requesttype, requestid, delay, address, length, cb);
@@ -77,7 +78,7 @@ usbtiny.prototype.writeFlash = function(delay, address, buffer, cb){
   var requesttype = 0x40;
   var requestid = statics.USBTINY_FLASH_WRITE;
 
-  console.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', delay.toString(16), ' index: ', address.toString(16), ' buflen: ', buffer.length.toString(16));
+  this.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', delay.toString(16), ' index: ', address.toString(16), ' buflen: ', buffer.length.toString(16));
   // console.log(buffer.toString('hex'));
 
   this.device.controlTransfer(
@@ -92,7 +93,7 @@ usbtiny.prototype.powerDown = function(cb){
   var index = 0;
   var length = 0;
 
-  console.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', val.toString(16), ' index: ', index.toString(16), ' buflen: ', length.toString(16));
+  this.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', val.toString(16), ' index: ', index.toString(16), ' buflen: ', length.toString(16));
 
   this.device.controlTransfer(
     requesttype, requestid, val, index, length, cb);
