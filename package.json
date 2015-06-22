@@ -1,6 +1,6 @@
 {
   "name": "usbtinyisp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "fully javascript usbtinyisp like adafruit usbtinyisp, mit fabisp or sparkfun tinyavr",
   "main": "index.js",
   "scripts": {
