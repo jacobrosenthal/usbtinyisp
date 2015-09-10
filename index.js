@@ -19,7 +19,7 @@ util.inherits(usbtiny, EE);
 
 usbtiny.prototype.open = function(cb){
   var self = this;
-  
+
   usb.findByIds(this.options.vid, this.options.pid, function(err, device){
     if(err) { return cb(err); }
 
@@ -99,40 +99,28 @@ usbtiny.prototype.powerDown = function(cb){
     requesttype, requestid, val, index, length, cb);
 };
 
-
 //only supporting paged for now and eeprom isnt paged on tiny85
+usbtiny.prototype.readEeprom = function(delay, address, length, cb){
 
-// usbtiny.prototype.readEeprom = function(delay, address, number, cb){
-//  this.device.controlTransfer(
-//    0xC0,
-//    statics.USBTINY_EEPROM_READ,
-//    delay,
-//    address, number, cb);
-// };
+  var requesttype = 0xC0;
+  var requestid = statics.USBTINY_EEPROM_READ;
 
-// usbtiny.prototype.writeEeprom = function(delay, address, number, cb){
-//  this.device.controlTransfer(
-//    0xC0,
-//    statics.USBTINY_EEPROM_WRITE,
-//    delay,
-//    address, number, cb);
-// };
+  this.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', delay.toString(16), ' index: ', address.toString(16), ' buflen: ', length.toString(16));
+
+  this.device.controlTransfer(
+    requesttype, requestid, delay, address, length, cb);
+};
+
+usbtiny.prototype.writeEeprom = function(delay, address, buffer, cb){
+
+  var requesttype = 0x40;
+  var requestid = statics.USBTINY_EEPROM_WRITE;
+
+  this.log('requesttype: ', requesttype.toString(16), ' requestid:', requestid.toString(16), ' val: ', delay.toString(16), ' index: ', address.toString(16), ' buflen: ', buffer.toString('hex'));
+
+  this.device.controlTransfer(
+   requesttype, requestid, delay, address, buffer, cb);
+};
 
 module.exports = usbtiny;
 
-
-
-// module.exports = {
-//   sync: sync,
-//   getSignature: getSignature,
-//   verifySignature: verifySignature,
-//   setOptions: setOptions,
-//   enterProgrammingMode: enterProgrammingMode,
-//   upload: upload,
-//   loadAddress: loadAddress,
-//   loadPage: loadPage,
-//   verify: verify,
-//   verifyPage: verifyPage,
-//   exitProgrammingMode: exitProgrammingMode,
-//   bootload: bootload
-// };
