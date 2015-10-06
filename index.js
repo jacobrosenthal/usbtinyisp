@@ -33,11 +33,14 @@ usbtiny.prototype.close = function(cb){
   this.device.close(cb);
 };
 
-usbtiny.prototype.setSCK = function(cb){
+usbtiny.prototype.setSCK = function(val, cb){
+  if (!cb) {
+    var cb = val;
+    var val = statics.SCK_DEFAULT;
+  }
 
   var requesttype = 0xC0;
   var requestid = statics.USBTINY_POWERUP;
-  var val = statics.SCK_DEFAULT;
   var index = statics.RESET_LOW;
   var length = 0;
 
