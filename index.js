@@ -14,7 +14,22 @@ var usbtiny = function(options) {
   this.device = {};
   this.log = options.log || function(){};
   this.options = options;
+
+  if (process.platform.toLowerCase() === 'darwin') {
+    fixOSX.call(this);
+  }
 };
+
+function fixOSX() {
+  (function(self, __open) {
+    self.device.__open = function() {
+      __open.call(this);
+      // injecting this line here to alleviate a bad error later
+      this.__claimInterface(0);
+    };
+  })(this, this.device.__open);
+};
+
 util.inherits(usbtiny, EE);
 
 usbtiny.prototype.open = function(cb){
