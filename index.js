@@ -14,10 +14,6 @@ var usbtiny = function(options) {
   this.device = {};
   this.log = options.log || function(){};
   this.options = options;
-
-  if (process.platform.toLowerCase() === 'darwin') {
-    fixOSX.call(this);
-  }
 };
 
 function fixOSX() {
@@ -37,6 +33,11 @@ usbtiny.prototype.open = function(cb){
 
   var device = usb.findByIds(this.options.vid, this.options.pid);
   self.device = device;
+
+  if (process.platform.toLowerCase() === 'darwin') {
+    fixOSX.call(this);
+  }
+
   self.device.open(cb);
 };
 
