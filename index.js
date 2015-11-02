@@ -32,6 +32,9 @@ usbtiny.prototype.open = function(cb){
   var self = this;
 
   var device = usb.findByIds(this.options.vid, this.options.pid);
+  if (!device) {
+    return cb(new Error('could not find requested device.'));
+  }
   self.device = device;
 
   if (process.platform.toLowerCase() === 'darwin') {
