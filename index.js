@@ -35,16 +35,12 @@ util.inherits(usbtiny, EE);
 usbtiny.prototype.open = function(cb){
   var self = this;
 
-  usb.findByIds(this.options.vid, this.options.pid, function(err, device){
-    if(err) { return cb(err); }
-
-    self.device = device;
-    self.device.open(cb);
-  });
+  var device = usb.findByIds(this.options.vid, this.options.pid);
+  self.device = device;
+  self.device.open(cb);
 };
 
 usbtiny.prototype.close = function(cb){
-
   this.device.close(cb);
 };
 
