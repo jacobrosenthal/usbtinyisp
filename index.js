@@ -39,12 +39,18 @@ usbtiny.prototype.open = function(cb){
   }
 
   self.device.open();
-  cb();
+
+  if (cb) {
+    cb();
+  }
 };
 
 usbtiny.prototype.close = function(cb){
   this.device.close();
-  cb();
+
+  if (cb) {
+    cb();
+  }
 };
 
 usbtiny.prototype.setSCK = function(val, cb){
