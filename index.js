@@ -38,11 +38,13 @@ usbtiny.prototype.open = function(cb){
     fixOSX.call(this);
   }
 
-  self.device.open(cb);
+  self.device.open();
+  cb();
 };
 
 usbtiny.prototype.close = function(cb){
-  this.device.close(cb);
+  this.device.close();
+  cb();
 };
 
 usbtiny.prototype.setSCK = function(val, cb){
