@@ -15,22 +15,45 @@ var usbtiny = function(options) {
   this.log = options.log || function(){};
   this.options = options;
 };
+
+function fixOSX() {
+  (function(self, __open) {
+    self.device.__open = function() {
+      __open.call(this);
+      // injecting this line here to alleviate a bad error later
+      this.__claimInterface(0);
+    };
+  })(this, this.device.__open);
+};
+
 util.inherits(usbtiny, EE);
 
 usbtiny.prototype.open = function(cb){
   var self = this;
 
-  usb.findByIds(this.options.vid, this.options.pid, function(err, device){
-    if(err) { return cb(err); }
+  var device = usb.findByIds(this.options.vid, this.options.pid);
+  if (!device) {
+    return cb(new Error('could not find requested device.'));
+  }
+  self.device = device;
 
-    self.device = device;
-    self.device.open(cb);
-  });
+  if (process.platform.toLowerCase() === 'darwin') {
+    fixOSX.call(this);
+  }
+
+  self.device.open();
+
+  if (cb) {
+    cb();
+  }
 };
 
 usbtiny.prototype.close = function(cb){
+  this.device.close();
 
-  this.device.close(cb);
+  if (cb) {
+    cb();
+  }
 };
 
 usbtiny.prototype.setSCK = function(val, cb){
