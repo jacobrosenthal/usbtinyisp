@@ -17,11 +17,11 @@
   },
   "homepage": "https://github.com/jacobrosenthal/usbtinyisp",
   "dependencies": {
-    "async": "^0.9.0",
-    "usb": "^1.2.0",
-    "when": "^3.7.2"
+    "async": "^2.6.1",
+    "usb": "^1.5.0"
   },
   "devDependencies": {
+    "when": "^3.7.2",
     "intel-hex": "^0.1.1"
   }
 }
